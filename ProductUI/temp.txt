@@ -1,0 +1,43 @@
+<div class="bg-gray-100 p-10">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <div
+      *ngFor="let product of products"
+      class="bg-white p-6 rounded-lg shadow-md"
+    >
+      <app-product-card [product]="product" [isAdmin]="true"></app-product-card>
+    </div>
+  </div>
+  <!--  Paginator -->
+  <div class="bg-gray-100">
+    <div class="max-w-7xl mx-auto p-4">
+      <div class="bg-white p-4 rounded-lg shadow-md">
+        <div class="flex justify-between items-center">
+          <!-- Dynamic text for showing results -->
+          <p class="text-gray-700" id="results-text">
+            Page {{ this.page.pageNumber }} of {{ this.page.totalPages -1 }} - Total {{ this.page.totalElements }} results
+
+          </p>
+          <div class="flex space-x-2">
+            <!-- Dynamic buttons for pagination -->
+            <button
+              id="previous-button"
+              class="px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100"
+              [disabled]="page.pageNumber === 0"
+              (click)="goToPreviousPage()"
+            >
+              Previous
+            </button>
+            <button
+              id="next-button"
+              class="px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100"
+              [disabled]="page.pageNumber === page.totalPages-1"
+              (click)="goToNextPage()"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+<div class="relative">
+  <div class="relative flex justify-center items-center h-48">
+    <img
+      [src]="product.imageUrl"
+      [alt]="product.title"
+      class="object-contain max-h-full max-w-full rounded-lg"
+    />
+    <span
+      class="absolute top-2 left-2 text-xs font-semibold px-2 py-1 rounded"
+      [ngClass]="{
+        'text-bg-warning': product.inventoryStatus === 'LOW_STOCK',
+        'text-bg-success': product.inventoryStatus === 'IN_STOCK',
+        'text-bg-danger': product.inventoryStatus === 'OUT_OF_STOCK'
+      }"
+    >
+      {{ product.inventoryStatus }}
+    </span>
+  </div>
+
+  <div class="mt-4">
+    <span class="text-gray-500 text-sm">{{ product.category }}</span>
+    <h2 class="text-lg font-semibold mt-1">{{ product.title }}</h2>
+    <div class="flex items-center mt-2">
+      <span class="text-2xl font-bold">{{
+          product.price | currency : "USD"
+        }}</span>
+    </div>
+    <div class="flex items-center justify-between mt-4">
+      <button
+        class="bg-black text-white px-4 py-2 rounded-lg flex items-center"
+        (click)="addToCart()"
+      >
+        <i class="fas fa-shopping-cart mr-2"></i>Buy Now
+      </button>
+
+      <!-- Admin-only buttons -->
+      <div *ngIf="isAdmin" class="flex space-x-3">
+        <button
+          class="bg-green-950 text-white px-4 py-2 rounded-lg flex items-center"
+          (click)="updateProduct()"
+        >
+          <i class="fas fa-edit mr-2"></i>Update
+        </button>
+        <button
+          class="bg-red-950 text-white px-4 py-2 rounded-lg flex items-center"
+          (click)="deleteProduct()"
+        >
+          <i class="fas fa-trash mr-2"></i>Delete
+        </button>
+      </div>
+
+      <!-- Rating -->
+      <div class="flex items-center">
+        <span class="text-gray-700 text-sm mr-1">{{ 5.0 }}</span>
+        <i class="fas fa-star text-yellow-500"></i>
+      </div>
+    </div>
+  </div>
+</div>

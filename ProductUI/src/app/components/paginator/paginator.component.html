@@ -1,0 +1,31 @@
+<div class="bg-gray-100">
+  <div class="max-w-7xl mx-auto p-4">
+    <div class="bg-white p-4 rounded-lg shadow-md">
+      <div class="flex justify-between items-center">
+        <p class="text-gray-700" id="results-text">
+          Page {{ currentPage + 1 }} of {{ totalPages }} - Total {{ totalElements }} results
+        </p>
+        <div class="flex space-x-2">
+          <button
+            id="previous-button"
+            class="px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100"
+            [disabled]="currentPage === 0"
+            (click)="previous.emit()"
+            aria-label="Previous Page"
+          >
+            Previous
+          </button>
+          <button
+            id="next-button"
+            class="px-4 py-2 bg-white border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100"
+            [disabled]="currentPage === totalPages - 1"
+            (click)="next.emit()"
+            aria-label="Next Page"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,43 @@
+###
+GET http://localhost:8080/api/v1/products?page=0&sort=id
+Content-Type: application/json
+
+
+###
+@sku=OO2M147C
+GET http://localhost:8080/api/v1/products/{{sku}}
+
+
+###
+POST http://localhost:8080/api/v1/products
+Content-Type: application/json
+
+{
+  "title": "Hyndi Avanti 2012",
+  "description": "Fantastic Car",
+  "price": 100000,
+  "imageUrl": "http://www.mysite.com/images/product.png",
+  "category": "toy",
+  "brand": "sil"
+}
+
+###
+@sku2=URVGO0SI
+DELETE http://localhost:8080/api/v1/products/{{sku2}}
+
+###
+GET http://localhost:8080/api/v1/products/reactive/{{sku2}}
+
+###
+@sku_update=OO2M147C
+PUT http://localhost:8080/api/v1/products/{{sku_update}}
+Content-Type: application/json
+
+{
+  "title": "e Hyndi Avanti 2012",
+  "description": "e Fantastic Car",
+  "price": 1500,
+  "imageUrl": "http://www.mysite.com/images/product.png",
+  "category": "Automotive",
+  "brand": "ron"
+}
