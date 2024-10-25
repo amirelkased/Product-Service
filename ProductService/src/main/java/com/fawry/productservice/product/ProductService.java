@@ -6,24 +6,31 @@ import com.fawry.productservice.category.Category;
 import com.fawry.productservice.category.CategoryService;
 import com.fawry.productservice.common.ResponsePage;
 import com.fawry.productservice.common.ResponsePageMapper;
+import com.fawry.productservice.product.dto.ProductDto;
+import com.fawry.productservice.product.dto.ProductsWithPriceResponse;
+import com.fawry.productservice.stock.StoreService;
 import com.fawry.productservice.util.ProductSkuGenerator;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProductService {
-    public static final Logger log = LoggerFactory.getLogger(ProductService.class);
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
     private final BrandService brandService;
     private final ResponsePageMapper pageMapper;
     private final ProductMapper productMapper;
+    private final StoreService storeService;
 
     public ResponsePage<ProductResponseDto> getAllProducts(Pageable pageable) {
         Page<ProductResponseDto> result = productRepository.getAllProducts(pageable);
@@ -34,17 +41,20 @@ public class ProductService {
 
     public Product getProductBySku(String sku) {
         return productRepository.findProductBySku(sku).orElseThrow(
-                ()->new EntityNotFoundException("No Product with SKU %s".formatted(sku))
+                () -> new EntityNotFoundException("No Product with SKU %s".formatted(sku))
         );
     }
 
+    @Transactional
     public Product createProduct(ProductRequestDto productRequestDto) {
         Product product = prepareNewProduct(productRequestDto);
-        return productRepository.save(product);
+        product = productRepository.save(product);
+        storeService.sendProductData(product.getSku());
+        return product;
     }
 
-    private Product prepareNewProduct(ProductRequestDto productRequestDto){
-         Category category =categoryService.getCategoryByName(productRequestDto.getCategory()) ;
+    private @NotNull Product prepareNewProduct(ProductRequestDto productRequestDto) {
+        Category category = categoryService.getCategoryByName(productRequestDto.getCategory());
         Brand brand = brandService.getBrandByName(productRequestDto.getBrand());
         Product product = productMapper.mapToProduct(productRequestDto);
         product.setCategory(category);
@@ -65,7 +75,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public Product updateProduct(String sku, ProductRequestDto request) {
+    public Product updateProduct(String sku, @NotNull ProductRequestDto request) {
         Product product = getProductBySku(sku);
         Category category = categoryService.getCategoryByName(request.getCategory());
         Brand brand = brandService.getBrandByName(request.getBrand());
@@ -73,5 +83,34 @@ public class ProductService {
         product.setBrand(brand);
         product.setCategory(category);
         return productRepository.save(product);
+    }
+
+    public ProductsWithPriceResponse getProductsWithPrices(List<String> skus) {
+        List<Product> products = productRepository.findProductsBySkuIn(skus);
+
+        if (skus.size() != products.size()) {
+            List<String> foundSkus = products.stream()
+                    .map(Product::getSku)
+                    .toList();
+            List<String> missingSkus = skus.stream()
+                    .filter(sku -> !foundSkus.contains(sku))
+                    .toList();
+            throw new IllegalArgumentException("The following SKUs were not found: " + missingSkus);
+        }
+
+        return ProductsWithPriceResponse.builder()
+                .status("success")
+                .message("All Products along with prices")
+                .productDtos(mapToProductsDto(products))
+                .build();
+    }
+
+    private List<ProductDto> mapToProductsDto(@NotNull List<Product> products) {
+        return products.stream().map(product ->
+                ProductDto.builder()
+                        .sku(product.getSku())
+                        .price(product.getPrice())
+                        .build()
+        ).toList();
     }
 }

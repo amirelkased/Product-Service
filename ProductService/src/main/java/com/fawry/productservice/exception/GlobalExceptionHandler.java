@@ -2,6 +2,7 @@ package com.fawry.productservice.exception;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.amqp.AmqpConnectException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,6 +20,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ErrorResponse> handleEntityNotFound(EntityNotFoundException exp, HttpServletRequest request) {
+        return buildErrorResponse(HttpStatus.NOT_FOUND, exp.getMessage(), request);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<ErrorResponse> handleIllegalArgException(IllegalArgumentException exp, HttpServletRequest request) {
         return buildErrorResponse(HttpStatus.NOT_FOUND, exp.getMessage(), request);
     }
 
@@ -45,6 +52,14 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception exp, HttpServletRequest request) {
         String errorMessage = "An unexpected error occurred. Please try again later.";
+        errorMessage = errorMessage.concat(exp.getMessage());
+        return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, errorMessage, request);
+    }
+
+    @ExceptionHandler(AmqpConnectException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<ErrorResponse> handleAmqpException(Exception exp, HttpServletRequest request) {
+        String errorMessage = "There is exception from AMQP Connection failed %s".formatted(exp.getMessage());
         return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, errorMessage, request);
     }
 

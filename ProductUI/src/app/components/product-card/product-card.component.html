@@ -19,14 +19,16 @@
 
   <div class="mt-4">
     <span class="text-gray-500 text-sm">{{ product.category }}</span>
-    <h2 class="text-lg font-semibold mt-1">{{ product.title }}</h2>
+    <h2 class="text-lg font-semibold mt-1" (click)="openOverlay(product)" (click)="openProductDetails(product)">{{ product.title }}</h2>
     <div class="flex items-center mt-2">
       <span class="text-2xl font-bold">{{
-          product.price | currency : "USD"
-        }}</span>
+        product.price | currency : "USD"
+      }}</span>
     </div>
     <div class="flex items-center justify-between mt-4">
       <button
+        [disabled]="product.stock === 0"
+        [ngClass]="{ 'btn inactive': product.stock === 0 }"
         class="bg-black text-white px-4 py-2 rounded-lg flex items-center"
         (click)="addToCart()"
       >
@@ -57,3 +59,15 @@
     </div>
   </div>
 </div>
+
+<!-- Include the Product Overlay Component -->
+<app-product-details 
+  [product]="selectedProduct" 
+  (close)="closeOverlay()"
+  *ngIf="selectedProduct">
+</app-product-details>
+<app-product-details 
+  [isOpen]="showOverlay"
+  [product]="selectedProduct"
+  (click)="showOverlay = false">
+</app-product-details>

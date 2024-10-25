@@ -6,6 +6,7 @@ import { ProductPage } from '../../model/ProductPage.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PaginatorComponent } from '../paginator/paginator.component';
+import { StoreService } from '../../services/store.service';
 
 @Component({
   selector: 'app-products',
@@ -16,7 +17,7 @@ import { PaginatorComponent } from '../paginator/paginator.component';
     ProductCardComponent,
     PaginatorComponent
   ],
-  providers: [ProductService],
+  providers: [ProductService, StoreService],
   templateUrl: './products.component.html',
   styleUrl: './products.component.css'
 })
@@ -26,12 +27,14 @@ export class ProductsComponent implements OnInit {
     data: [],
     totalElements: 0,
     totalPages: 0,
-    pageSize: 6,
+    pageSize: 21,
     pageNumber: 0,
     numberOfElements: 6
   };
 
-  constructor(private readonly productService: ProductService) {
+  constructor(private readonly productService: ProductService,
+    private readonly storeService: StoreService
+  ) {
 
   }
 
@@ -55,9 +58,16 @@ export class ProductsComponent implements OnInit {
               product.category,
               product.brand,
               "",
-              100
+              0
             )
-
+            // this.storeService.getProductStock(pro.sku).subscribe(
+            //   {
+            //     next: (res: ProductStock) => {
+            //       product.stock= res.stock;
+            //     }
+            //   });
+            pro.stock = this.storeService.getProductStock(pro.sku);
+            pro.inventoryStatus = getStockStatus(pro.stock);
             return pro;
           }
         );
@@ -86,4 +96,17 @@ export class ProductsComponent implements OnInit {
     return product.sku; // Assuming each product has a unique id
   }
 
+  removeProduct(sku: string) {
+    this.products = this.products.filter(product => product.sku != sku);
+  }
 }
+function getStockStatus(stock: number): string {
+  if (stock === 0) {
+    return "OUT_OF_STOCK";
+  } else if (stock <= 5) {
+    return "LOW_STOCK";
+  } else {
+    return "IN_STOCK";
+  }
+}
+
