@@ -1,18 +1,20 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CardModule } from 'primeng/card';
-import { CommonModule, CurrencyPipe, NgClass } from '@angular/common';
-import { Product, ProductForm } from '../../model/Product.model';
-import { FormsModule, NG_ASYNC_VALIDATORS } from '@angular/forms';
-import { DataViewModule } from 'primeng/dataview';
-import { DropdownModule } from 'primeng/dropdown';
-import { PaginatorModule } from 'primeng/paginator';
-import { ButtonModule } from 'primeng/button';
-import { RatingModule } from 'primeng/rating';
-import { TagModule } from 'primeng/tag';
-import { SelectButton } from 'primeng/selectbutton';
-import { ProductService } from '../../services/product.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ProductDetailsComponent } from "../product-details/product-details.component";
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {CardModule} from 'primeng/card';
+import {CommonModule, CurrencyPipe, NgClass} from '@angular/common';
+import {Product, ProductForm} from '../../model/Product.model';
+import {FormsModule} from '@angular/forms';
+import {DataViewModule} from 'primeng/dataview';
+import {DropdownModule} from 'primeng/dropdown';
+import {PaginatorModule} from 'primeng/paginator';
+import {ButtonModule} from 'primeng/button';
+import {RatingModule} from 'primeng/rating';
+import {TagModule} from 'primeng/tag';
+import {SelectButton} from 'primeng/selectbutton';
+import {ProductService} from '../../services/product.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ProductDetailsComponent} from "../product-details/product-details.component";
+import {CartService} from '../../services/cart.service';
+import {NotificationService} from '../../services/notification.service';
 
 @Component({
   selector: 'app-product-card',
@@ -51,15 +53,25 @@ export class ProductCardComponent {
   }
 
   constructor(private readonly productService: ProductService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router
+              private readonly route: ActivatedRoute,
+              private readonly router: Router,
+              private readonly cartService: CartService,
+              private readonly notificationService:NotificationService
   ) {
 
   }
 
   addToCart() {
     console.log('Product added to cart:', this.product.title);
-    // Add product to cart logic here
+    const productCart = {sku: '', title: '', price: 0, quantity: 1, image: ''};
+    productCart.sku = this.product.sku;
+    productCart.title = this.product.title;
+    productCart.image = this.product.imageUrl;
+    productCart.price = this.product.price;
+    this.cartService.addToCart(productCart);
+    this.notificationService.showNotification(
+      `Product ${this.product.title} added to cart successfully!`,'success'
+    );
   }
 
   updateProduct() {

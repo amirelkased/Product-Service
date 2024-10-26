@@ -1,9 +1,8 @@
-import { Component } from '@angular/core';
-import { ProductFormComponent } from '../product-form/product-form.component';
-import { ProductService } from '../../services/product.service';
-import { ActivatedRoute } from '@angular/router';
-import { FullFormProduct, ProductForm } from '../../model/Product.model';
-import e from 'cors';
+import {Component} from '@angular/core';
+import {ProductFormComponent} from '../product-form/product-form.component';
+import {ProductService} from '../../services/product.service';
+import {ActivatedRoute} from '@angular/router';
+import {FullFormProduct, ProductForm} from '../../model/Product.model';
 
 @Component({
   selector: 'app-update-product',
@@ -15,7 +14,7 @@ export class UpdateProductComponent {
   existingProduct!: ProductForm;
 
   constructor(private readonly productService: ProductService,
-    private readonly route: ActivatedRoute
+              private readonly route: ActivatedRoute
   ) {
     this.route.params.subscribe(
       params => {

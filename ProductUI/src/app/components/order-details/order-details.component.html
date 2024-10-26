@@ -1,0 +1,41 @@
+<div class="max-w-2xl mx-auto mt-10 bg-white p-8 rounded-lg shadow-lg">
+  <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Order #{{ order?.id }}</h1>
+  <div class="grid grid-cols-2 gap-6 mb-8">
+    <div>
+      <p class="text-gray-600"><span
+        class="font-semibold text-gray-800">Date Created:</span> {{ order?.createdAt | date: 'MMM d, yyyy' }}</p>
+      <p class="text-gray-600"><span class="font-semibold text-gray-800">Discount:</span> ${{ order?.discountAmount }}
+      </p>
+      <p class="text-gray-600">
+        <span class="font-semibold text-gray-800">Order Status:</span>
+        <span [ngClass]="{
+                    'text-green-600': order?.orderStatus === 'COMPLETED' || order?.orderStatus === 'SUCCESS',
+                    'text-yellow-600': order?.orderStatus === 'PENDING',
+                    'text-red-600': order?.orderStatus === 'FAILED' || order?.orderStatus === 'COUPON_INVALID' || order?.orderStatus === 'OUT_OF_STOCK'
+                }">{{ order?.orderStatus }}</span>
+      </p>
+    </div>
+    <div>
+      <p class="text-gray-600"><span class="font-semibold text-gray-800">Total Amount:</span> ${{ order?.totalAmount }}
+      </p>
+      <p class="text-gray-600"><span class="font-semibold text-gray-800">Customer ID:</span> {{ order?.customerId }}</p>
+      <p class="text-gray-600">
+        <span class="font-semibold text-gray-800">Payment Status:</span>
+        <span [ngClass]="{
+                    'text-green-600': order?.paymentStatus === 'SUCCESS',
+                    'text-yellow-600': order?.paymentStatus === 'PENDING',
+                    'text-red-600': order?.paymentStatus === 'FAILED'
+                }">{{ order?.paymentStatus }}</span>
+      </p>
+    </div>
+  </div>
+  <h2 class="text-2xl font-semibold mb-6 text-gray-800">Order Items</h2>
+  <div class="space-y-6">
+    <div *ngFor="let item of order?.orderItems"
+         class="border p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+      <p class="font-semibold text-gray-800">{{ item.productSku }}</p>
+      <p class="text-gray-600">Quantity: {{ item.quantity }}</p>
+      <p class="text-gray-600">Price: ${{ item.price | number: '1.2-2' }}</p>
+    </div>
+  </div>
+</div>

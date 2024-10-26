@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
-import { ProductFormComponent } from '../product-form/product-form.component';
-import { ProductService } from '../../services/product.service';
-import { Router } from '@angular/router';
-import { Product } from '../../model/Product.model';
+import {Component} from '@angular/core';
+import {ProductFormComponent} from '../product-form/product-form.component';
+import {ProductService} from '../../services/product.service';
+import {Router} from '@angular/router';
+import {Product} from '../../model/Product.model';
 
 @Component({
   selector: 'app-create-product',
@@ -12,10 +12,10 @@ import { Product } from '../../model/Product.model';
 })
 export class CreateProductComponent {
 
-  constructor(private readonly productService:ProductService,
-    private readonly router:Router
+  constructor(private readonly productService: ProductService,
+              private readonly router: Router
   ) {
-    
+
   }
 
   onCreate(productData: any) {

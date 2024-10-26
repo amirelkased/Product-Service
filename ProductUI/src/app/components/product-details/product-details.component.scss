@@ -32,7 +32,7 @@
   font-size: 24px;
   cursor: pointer;
   padding: 5px 10px;
-  
+
   &:hover {
     color: red;
   }
@@ -41,7 +41,7 @@
 .product-details {
   display: flex;
   gap: 2rem;
-  
+
   @media (max-width: 768px) {
     flex-direction: column;
   }
@@ -49,7 +49,7 @@
 
 .product-image {
   flex: 0 0 300px;
-  
+
   img {
     width: 100%;
     height: auto;
@@ -60,27 +60,27 @@
 
 .product-info {
   flex: 1;
-  
+
   h2 {
     margin-top: 0;
     margin-bottom: 1rem;
     color: #333;
   }
-  
+
   p {
     margin: 0.5rem 0;
-    
+
     &.description {
       color: #666;
       line-height: 1.6;
     }
-    
+
     &.price {
       font-size: 1.2rem;
       font-weight: bold;
       color: #2c5282;
     }
-    
+
     &.category,
     &.brand {
       color: #666;

@@ -1,3 +1,3 @@
-export interface ProductStock{
-    stock:number
+export interface ProductStock {
+  stock: number
 }

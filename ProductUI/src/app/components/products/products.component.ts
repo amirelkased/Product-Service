@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { ProductService } from '../../services/product.service';
-import { Product } from '../../model/Product.model';
-import { ProductCardComponent } from '../product-card/product-card.component';
-import { ProductPage } from '../../model/ProductPage.model';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { PaginatorComponent } from '../paginator/paginator.component';
-import { StoreService } from '../../services/store.service';
+import {Component, OnInit} from '@angular/core';
+import {ProductService} from '../../services/product.service';
+import {Product} from '../../model/Product.model';
+import {ProductCardComponent} from '../product-card/product-card.component';
+import {ProductPage} from '../../model/ProductPage.model';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {PaginatorComponent} from '../paginator/paginator.component';
+import {StoreService} from '../../services/store.service';
+import {NotificationService} from '../../services/notification.service';
 
 @Component({
   selector: 'app-products',
@@ -33,7 +34,8 @@ export class ProductsComponent implements OnInit {
   };
 
   constructor(private readonly productService: ProductService,
-    private readonly storeService: StoreService
+              private readonly storeService: StoreService,
+              private readonly notificationService:NotificationService
   ) {
 
   }
@@ -99,7 +101,14 @@ export class ProductsComponent implements OnInit {
   removeProduct(sku: string) {
     this.products = this.products.filter(product => product.sku != sku);
   }
+
+  showTestNotification() {
+        this.notificationService.showNotification(
+            'Test notification!','success'
+        );
+    }
 }
+
 function getStockStatus(stock: number): string {
   if (stock === 0) {
     return "OUT_OF_STOCK";

@@ -1,6 +1,6 @@
-import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ProductForm } from '../../model/Product.model';
+import {CommonModule} from '@angular/common';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {ProductForm} from '../../model/Product.model';
 
 
 @Component({

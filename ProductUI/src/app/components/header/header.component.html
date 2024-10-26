@@ -6,7 +6,7 @@
         [routerLink]=""
         class="text-white text-xl font-semibold hover:text-gray-300"
       >
-        <img [src]="userImg" alt="MyStore Logo" class="h-8 w-auto" />
+        <img [src]="userImg" alt="MyStore Logo" class="h-8 w-auto"/>
       </a>
 
       <!-- Navigation Links -->
@@ -25,25 +25,23 @@
       >
         New Product
       </a>
-    </div>
-
-    <!-- User Profile Button -->
-    <div class="relative">
-      <button
-        class="text-white bg-red-700 hover:bg-red-600 rounded-full h-10 w-10 flex items-center justify-center transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-500"
-        aria-label="User Profile"
+      <a
+        [routerLink]="['orders']"
+        class="text-gray-400 hover:text-white transition-colors duration-300"
+        aria-label="My orders"
       >
-        <!-- Replace with user icon/profile image -->
-        <span class="text-sm font-medium">U</span>
-      </button>
-
-      <!-- Dropdown for user actions (optional) -->
-      <!-- Uncomment if needed
-      <div class="absolute right-0 mt-2 w-48 py-2 bg-white rounded-md shadow-lg z-20">
-        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</a>
-        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Logout</a>
+        Orders
+      </a>
+    </div>
+    <div class="order-lg-last col-lg-5 col-sm-8 col-8">
+      <div class="float-end">
+        <a data-bs-toggle="offcanvas" [routerLink]="['orders/cart']" class="btn btn-light" style="margin-right: 10px;">
+          <i class="fa fa-shopping-cart"></i> <span class="ms-1">My cart </span>
+        </a>
+        <a href="#" class="btn btn-light">
+          <i class="fa fa-user"></i> <span class="ms-1 d-none d-sm-inline-block">Sign in  </span>
+        </a>
       </div>
-      -->
     </div>
   </div>
 </nav>

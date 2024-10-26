@@ -1,0 +1,95 @@
+<section class="bg-blend-color-burn py-2">
+  <section class="bg-gray-100">
+    <main class="container mx-auto px-4 py-6">
+      <div class="bg-white p-6 rounded shadow-sm">
+        <h2 class="text-xl font-bold mb-4">Your shopping cart</h2>
+        @if (cartProducts.length != 0) {
+          <div class="space-y-4">
+            <div *ngFor="let item of cartProducts" class="flex items-center space-x-4">
+              <img [src]="item.image" alt="Product Image" class="w-16 h-16"/>
+              <div class="flex-1">
+                <a [routerLink]="['products/' + item.sku]" class="font-bold">{{ item.title }}</a>
+                <div class="text-gray-600">Description Here</div>
+              </div>
+              <div class="flex items-center space-x-4">
+                <label class="text-gray-600">Quantity:</label>
+                <select class="border rounded px-2 py-1" (change)="changeQuantity($event, item)">
+                  <option *ngFor="let qty of [1, 2, 3, 4]">{{ qty }}</option>
+                </select>
+                <div class="flex flex-col items-end">
+                  <div class="font-bold">{{ item.price * item.quantity | currency }}</div>
+                  <div class="text-gray-600">{{ item.price | currency }} / per item</div>
+                </div>
+              </div>
+              <button class="text-bg-danger text-red-600 px-4 py-1 rounded" (click)="removeFromCart(item)">
+                Remove
+              </button>
+            </div>
+          </div>
+        } @else {
+          <div class="bg-white p-6 rounded shadow-sm text-center">
+            <div class="text-gray-500 text-xl font-semibold mb-4">
+              <i class="fas fa-shopping-cart text-3xl mb-2"></i>
+              <p>Your cart is currently empty</p>
+            </div>
+            <p class="text-gray-600 mb-4">
+              Looks like you haven't added any products yet. Start shopping to fill it up!
+            </p>
+            <a [routerLink]="['/shop']" class="bg-blue-600 text-white px-4 py-2 rounded">
+              Browse Products
+            </a>
+          </div>
+        }
+        <div class="mt-6 flex items-center space-x-2 text-gray-600">
+          <i class="fas fa-truck"></i>
+          <span>Free Delivery within 1-2 days</span>
+        </div>
+      </div>
+
+      <div *ngIf="cartProducts.length != 0" class="mt-6 flex justify-between">
+        <div class="bg-white p-6 rounded shadow-sm w-1/3">
+          <h3 class="font-bold mb-4">Have coupon?</h3>
+          <div class="flex space-x-2">
+            <input type="text" placeholder="Coupon code" [(ngModel)]="couponCode"
+                   class="border rounded px-2 py-1 flex-1" [ngModelOptions]="{ standalone: true }"/>
+            <button class="text-bg-primary text-gray-600 px-4 py-1 rounded" (click)="applyCoupon()">Apply</button>
+          </div>
+          <div *ngIf="!isCouponValid" class="error-message text-danger mt-2">{{ couponErrorMessage }}</div>
+        </div>
+
+        <div class="bg-white p-6 rounded shadow-sm w-1/3">
+          <div class="space-y-2">
+            <div class="flex justify-between">
+              <span>Total price:</span>
+              <span>{{ (totalAmount - taxs + discount) | currency }}</span>
+            </div>
+            <div *ngIf="couponCode.length >0 && isCouponValid && cartProducts.length != 0" class="flex justify-between">
+              <span>Discount:</span>
+              <span class="text-green-600">-{{ discount | currency }}</span>
+            </div>
+            <div *ngIf="cartProducts.length != 0" class="flex justify-between">
+              <span>TAX:</span>
+              <span>{{ taxs | currency }}</span>
+            </div>
+            <hr/>
+            <div class="flex justify-between font-bold">
+              <span>Total:</span>
+              <span>{{ (totalAmount == taxs) ? 0 : totalAmount | currency }}</span>
+            </div>
+          </div>
+          <div class="d-grid gap-2 my-3">
+            <button (click)="handlePurchase()" class="text-bg-success text-white w-full py-2 rounded text-center">Make
+              Purchase
+            </button>
+            <a [routerLink]="['']" class="text-bg-secondary text-gray-600 w-full py-2 rounded text-center">Back to
+              shop</a>
+
+            <p *ngIf="orderFail" class="error-message text-danger mt-2">
+              {{ orderErrorMessage }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </section>
+</section>

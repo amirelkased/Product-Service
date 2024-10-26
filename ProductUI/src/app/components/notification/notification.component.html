@@ -1,0 +1,7 @@
+<div *ngIf="show"
+         [@notificationState]="show ? 'visible' : 'hidden'"
+         class="notification"
+         [ngClass]="{'success': currentNotification?.status === 'success',
+                     'error': currentNotification?.status === 'error'}">
+      {{ currentNotification?.message }}
+    </div>
