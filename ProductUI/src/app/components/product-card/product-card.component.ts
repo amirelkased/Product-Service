@@ -11,10 +11,10 @@ import {RatingModule} from 'primeng/rating';
 import {TagModule} from 'primeng/tag';
 import {SelectButton} from 'primeng/selectbutton';
 import {ProductService} from '../../services/product.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {ProductDetailsComponent} from "../product-details/product-details.component";
 import {CartService} from '../../services/cart.service';
-import {NotificationService} from '../../services/notification.service';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-product-card',
@@ -53,10 +53,9 @@ export class ProductCardComponent {
   }
 
   constructor(private readonly productService: ProductService,
-              private readonly route: ActivatedRoute,
               private readonly router: Router,
               private readonly cartService: CartService,
-              private readonly notificationService:NotificationService
+              private readonly toastr: ToastrService
   ) {
 
   }
@@ -69,9 +68,7 @@ export class ProductCardComponent {
     productCart.image = this.product.imageUrl;
     productCart.price = this.product.price;
     this.cartService.addToCart(productCart);
-    this.notificationService.showNotification(
-      `Product ${this.product.title} added to cart successfully!`,'success'
-    );
+    this.toastr.success(`Product ${this.product.title} added to cart successfully!`,'Add To Cart');
   }
 
   updateProduct() {
@@ -85,10 +82,12 @@ export class ProductCardComponent {
     this.productService.deleteProduct(this.product.sku).subscribe({
       next: (res) => {
         console.log(res);
+        this.toastr.success(`Product '${this.product.title}' was Deleted successfully`, 'Delete Product');
       },
       error: (err) => {
         console.log('Error When request delete:');
         console.log(err);
+        this.toastr.error('Ops! Error happening when deleting product!', 'Delete Product');
       }
     });
     this.removeProduct.emit(this.product.sku);

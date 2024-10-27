@@ -7,7 +7,8 @@ import {CouponService} from '../../services/coupon.service';
 import {CouponRequest} from '../../model/CouponResponse.model';
 import {OrderService} from '../../services/order.service';
 import {OrderRequest} from '../../model/OrderRequest.model';
-import {Order, OrderItem} from '../../model/OrderResponse.model';
+import {OrderItem} from '../../model/OrderResponse.model';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-cart',
@@ -23,15 +24,12 @@ export class CartComponent implements OnInit {
   totalAmount: number = 0;
   taxs: number = 14;
   discount: number = 0;
-  isCouponValid: boolean = true;
-  couponErrorMessage: string = '';
   loggedIn: boolean = false;
-  orderFail: boolean = false;
-  orderErrorMessage: string = '';
 
   constructor(private readonly cartService: CartService,
               private readonly couponService: CouponService,
               private readonly orderService: OrderService,
+              private readonly toastr:ToastrService,
               private readonly router: Router) {
   }
 
@@ -51,14 +49,15 @@ export class CartComponent implements OnInit {
     this.couponService.consume(conponReq).subscribe({
       next: (res) => {
         if (res.status == 'success') {
-          this.isCouponValid = true;
+          this.toastr.success("Coupon applied successfully", 'Apply Coupon')
           console.log(res)
           this.discount = (this.totalAmount - this.taxs - res.amount);
           this.calculateTotal();
         } else {
-          this.isCouponValid = false;
-          this.couponErrorMessage = res.message;
+          this.toastr.error(`Ops! Error: ${res.message}`, 'Apply Coupon');
         }
+      },error:(err)=>{
+        this.toastr.error(`Ops! Error: ${err.error.message}`, 'Apply Coupon');
       }
     })
   }
@@ -78,6 +77,7 @@ export class CartComponent implements OnInit {
 
   removeFromCart(item: ProductCart) {
     this.cartService.removeFromCart(item.sku);
+    this.toastr.warning('Product removed from cart!', 'Organize Cart');
   }
 
 
@@ -105,26 +105,14 @@ export class CartComponent implements OnInit {
     this.orderService.placeOrder(orderRequest).subscribe({
       next: (res) => {
         console.log(`order created successfully`);
-        this.storeOrderLocally(res);
+        this.toastr.success('Order Created successfully', 'Purchase Products')
         this.router.navigate(['orders']);
       },
       error: (err) => {
+        this.toastr.error(`Ops! Error: ${err.error.message}`, 'Purchase Products');
         console.log(`failed to create order`);
         console.log(err);
-        this.orderErrorMessage = err.error.message;
-        this.orderFail = true;
       }
     });
-  }
-
-  storeOrderLocally(order: Order) {
-    let orders: Order[] = [];
-    const data = localStorage.getItem("orders");
-
-    if (data) {
-      orders = JSON.parse(data);
-    }
-    orders.push(order);
-    localStorage.setItem("orders", JSON.stringify(orders));
   }
 }

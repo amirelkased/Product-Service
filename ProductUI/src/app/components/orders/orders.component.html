@@ -1,44 +1,79 @@
-<div *ngIf="isLoading">Loading orders...</div>
-<div *ngIf="errorMessage != null" class="error-message">{{ errorMessage }}</div>
+<div *ngIf="isLoading" class="text-center text-primary my-4">Loading orders...</div>
+<div *ngIf="errorMessage" class="text-danger my-4 text-center">{{ errorMessage }}</div>
 
-<div *ngIf="orders != null && !isLoading; else noOrders">
-  <h2>Orders</h2>
-  <table>
-    <thead>
-    <tr>
-      <th>Order ID</th>
-      <th>Customer ID</th>
-      <th>Total Amount</th>
-      <th>Discount Amount</th>
-      <th>Status</th>
-      <th>Items</th>
-      <th>View details</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let order of orders">
-      <td>{{ order.id }}</td>
-      <td>{{ order.customerId }}</td>
-      <td>{{ order.totalAmount | currency }}</td>
-      <td>{{ order.discountAmount | currency }}</td>
-      <td>{{ order.orderStatus }}</td>
-      <td>
-        <ul>
-          <li *ngFor="let item of order.orderItems">
-            {{ item.productSku }} (Qty: {{ item.quantity }}) - {{ item.price | currency }}
-          </li>
-        </ul>
-      </td>
-      <td>
-        <a [routerLink]="['/orders/', order.id]" class="text-bg-info rounded p-3 pt-2 pb-2 m-auto">View Details</a>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-</div>
-
-<ng-template #noOrders>
-  <div *ngIf="orders !=null && !isLoading && errorMessage == null">
-    <p>No orders available.</p>
+<div class="container">
+  <!-- Filter Section -->
+  <div class="filter-section d-flex align-items-center mb-4 bg-light p-3 rounded">
+    <div class="me-3">
+      <label for="startDate" class="form-label">Start Date:</label>
+      <input
+        type="date"
+        id="startDate"
+        [(ngModel)]="startDate"
+        class="form-control"
+        placeholder="dd-mm-yyyy"
+      />
+    </div>
+    <div class="me-3">
+      <label for="endDate" class="form-label">End Date:</label>
+      <input
+        type="date"
+        id="endDate"
+        [(ngModel)]="endDate"
+        class="form-control"
+        placeholder="dd-mm-yyyy"
+      />
+    </div>
+    <button (click)="fetchOrders()" class="btn text-white" style="background-color: #17a2b8;">
+      Filter
+    </button>
   </div>
-</ng-template>
+
+  <!-- Orders Table -->
+  <div *ngIf="orders && !isLoading; else noOrders">
+    <table class="table table-bordered">
+      <thead class="bg-light text-center">
+        <tr>
+          <th>Order ID</th>
+          <th>Customer ID</th>
+          <th>Total Amount</th>
+          <th>Discount Amount</th>
+          <th>Status</th>
+          <th>Items</th>
+          <th>View Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of orders" class="text-center">
+          <td>{{ order.id }}</td>
+          <td>{{ order.customerId }}</td>
+          <td>{{ order.totalAmount | currency }}</td>
+          <td>{{ order.discountAmount | currency }}</td>
+          <td>{{ order.orderStatus }}</td>
+          <td>
+            <ul class="list-unstyled mb-0">
+              <li *ngFor="let item of order.orderItems">
+                {{ item.productSku }} (Qty: {{ item.quantity }}) - {{ item.price | currency }}
+              </li>
+            </ul>
+          </td>
+          <td>
+            <a
+              [routerLink]="['/orders/', order.id]"
+              class="btn btn-view-details text-white"
+              style="background-color: #6c757d;"
+            >
+              View Details
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #noOrders>
+    <div class="text-center text-muted my-4">
+      <p>No orders available.</p>
+    </div>
+  </ng-template>
+</div>

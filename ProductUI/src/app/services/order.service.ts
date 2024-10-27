@@ -19,18 +19,10 @@ export class OrderService {
     return this.http.post<Order>(this.RESOURCE_URL, order);
   }
 
-  getAllOrders(customerId: number | string, from?: Date, to?: Date): Observable<OrderPageResponse> {
+  getAllOrders(customerId: number | string, from: string, to: string): Observable<OrderPageResponse> {
     let params = new HttpParams();
-    if (from) {
-      params = params.set('from', from.toISOString());
-    } else {
-      params = params.set('from', '1970-01-01')
-    }
-    if (to) {
-      params = params.set('to', to.toISOString());
-    } else {
-      params = params.set('to', '2024-10-26')
-    }
+      params = params.set('from', from);
+      params = params.set('to', to);
     console.log(`from ${params.get('from')}, to ${params.get('to')}`);
     return this.http.get<OrderPageResponse>(`${this.RESOURCE_URL}/${customerId}`, {params});
   }

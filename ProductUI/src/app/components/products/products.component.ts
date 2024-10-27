@@ -7,7 +7,6 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {PaginatorComponent} from '../paginator/paginator.component';
 import {StoreService} from '../../services/store.service';
-import {NotificationService} from '../../services/notification.service';
 
 @Component({
   selector: 'app-products',
@@ -34,8 +33,7 @@ export class ProductsComponent implements OnInit {
   };
 
   constructor(private readonly productService: ProductService,
-              private readonly storeService: StoreService,
-              private readonly notificationService:NotificationService
+              private readonly storeService: StoreService
   ) {
 
   }
@@ -101,12 +99,6 @@ export class ProductsComponent implements OnInit {
   removeProduct(sku: string) {
     this.products = this.products.filter(product => product.sku != sku);
   }
-
-  showTestNotification() {
-        this.notificationService.showNotification(
-            'Test notification!','success'
-        );
-    }
 }
 
 function getStockStatus(stock: number): string {
