@@ -10,8 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.retry.support.RetryTemplate;
 
-import java.time.Duration;
-
 @Configuration
 public class RabbitMQConfig {
     @Value("${rabbitmq.store.queue.name}")
@@ -20,29 +18,33 @@ public class RabbitMQConfig {
     private String exchange;
     @Value("${rabbitmq.store.routing.key}")
     private String routingKey;
+    @Value("${rabbitmq.retry.template.maxAttemps}")
+    private int retryMaxAttemps;
+    @Value("${rabbitmq.retry.template.backoff.milliseconds}")
+    private long retryBackoff;
 
     @Bean
-    public Queue queue(){
+    public Queue queue() {
         return new Queue(queue);
     }
 
     @Bean
-    public TopicExchange topicExchange(){
+    public TopicExchange topicExchange() {
         return new TopicExchange(exchange);
     }
 
     @Bean
-    public Binding binding(){
+    public Binding binding() {
         return BindingBuilder.bind(queue())
                 .to(topicExchange())
                 .with(routingKey);
     }
 
     @Bean
-    public RetryTemplate retryTemplate(){
+    public RetryTemplate retryTemplate() {
         return RetryTemplate.builder()
-                .maxAttempts(3)
-                .fixedBackoff(Duration.ofMinutes(1))
+                .maxAttempts(retryMaxAttemps)
+                .fixedBackoff(retryBackoff)
                 .retryOn(AmqpException.class)
                 .build();
     }
