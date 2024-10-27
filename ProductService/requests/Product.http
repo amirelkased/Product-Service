@@ -1,10 +1,8 @@
 ###
 GET http://localhost:8080/api/v1/products?page=0&sort=id
-Content-Type: application/json
-
 
 ###
-@sku=OO2M147C
+@sku=T02BIT0J
 GET http://localhost:8080/api/v1/products/{{sku}}
 
 
@@ -17,19 +15,19 @@ Content-Type: application/json
   "description": "Fantastic Car",
   "price": 100000,
   "imageUrl": "http://www.mysite.com/images/product.png",
-  "category": "toy",
-  "brand": "sil"
+  "category": "beauty",
+  "brand": "essence"
 }
 
 ###
-@sku2=URVGO0SI
+@sku2=T02BIT0J
 DELETE http://localhost:8080/api/v1/products/{{sku2}}
 
 ###
 GET http://localhost:8080/api/v1/products/reactive/{{sku2}}
 
 ###
-@sku_update=OO2M147C
+@sku_update=T02BIT0J
 PUT http://localhost:8080/api/v1/products/{{sku_update}}
 Content-Type: application/json
 
@@ -38,6 +36,6 @@ Content-Type: application/json
   "description": "e Fantastic Car",
   "price": 1500,
   "imageUrl": "http://www.mysite.com/images/product.png",
-  "category": "Automotive",
-  "brand": "ron"
+  "category": "beauty",
+  "brand": "essence"
 }

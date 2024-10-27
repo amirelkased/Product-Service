@@ -1,5 +1,5 @@
 ###
-GET http://localhost:8080/api/v1/categories?sort=name,desc&sort=id,desc
+GET http://localhost:8080/api/v1/categories?sort=name,desc
 
 ###
 GET http://localhost:8080/api/v1/categories/10
@@ -9,10 +9,9 @@ POST http://localhost:8080/api/v1/categories
 Content-Type: application/json
 
 {
-  "name": "",
-  "description": "Mobile desc"
+  "name": "rbeyrbr"
 }
 
 ###
-@id=6
+@id=27
 DELETE http://localhost:8080/api/v1/categories/{{id}}
