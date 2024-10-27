@@ -21,9 +21,21 @@ export class CartService {
   cart$ = this.cartSubject.asObservable();
   cartCount$ = this.cartCountSubject.asObservable();
 
+  constructor() {
+    this.loadCartFromLocalStorage(); // Load cart data from local storage on initialization
+  }
+
+  private loadCartFromLocalStorage() {
+    const cartData = localStorage.getItem('cart');
+    if (cartData) {
+      this.cartProducts = JSON.parse(cartData);
+      this.updateCart(); // Update the BehaviorSubjects with loaded cart data
+    }
+  }
+
   addToCart(product: ProductCart) {
     const existingProduct = this.cartProducts.find(item => item.sku === product.sku);
-    if (existingProduct) {
+    if (existingProduct != undefined && existingProduct.quantity <5) {
       existingProduct.quantity += 1; // Increase quantity if already in cart
     } else {
       this.cartProducts.push({...product, quantity: 1}); // Add new product
@@ -36,8 +48,18 @@ export class CartService {
     this.updateCart();
   }
 
-  updateCart() {
+  updateCart(isCheckout:boolean = false) {
+    this.updateLocalStorage(isCheckout);
     this.cartSubject.next(this.cartProducts);
-    this.cartCountSubject.next(this.cartProducts.reduce((acc, product) => acc + product.quantity, 0));
+    this.cartCountSubject.next(this.cartProducts.length);
+  }
+
+  private updateLocalStorage(isCheckout:boolean= false) {
+    if (isCheckout){
+      localStorage.removeItem('cart');
+      this.cartProducts = [];
+    }else {
+      localStorage.setItem('cart', JSON.stringify(this.cartProducts));
+    }
   }
 }

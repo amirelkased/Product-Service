@@ -51,7 +51,7 @@
           <td>{{ order.discountAmount | currency }}</td>
           <td>{{ order.orderStatus }}</td>
           <td>
-            <ul class="list-unstyled mb-0">
+            <ul class="list-disc ml-3 mb-0">
               <li *ngFor="let item of order.orderItems">
                 {{ item.productSku }} (Qty: {{ item.quantity }}) - {{ item.price | currency }}
               </li>
@@ -61,7 +61,7 @@
             <a
               [routerLink]="['/orders/', order.id]"
               class="btn btn-view-details text-white"
-              style="background-color: #6c757d;"
+              style="background-color: #094798;"
             >
               View Details
             </a>

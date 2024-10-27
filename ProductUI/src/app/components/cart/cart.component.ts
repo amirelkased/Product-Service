@@ -77,6 +77,7 @@ export class CartComponent implements OnInit {
 
   removeFromCart(item: ProductCart) {
     this.cartService.removeFromCart(item.sku);
+    this.applyCoupon();
     this.toastr.warning('Product removed from cart!', 'Organize Cart');
   }
 
@@ -105,6 +106,7 @@ export class CartComponent implements OnInit {
     this.orderService.placeOrder(orderRequest).subscribe({
       next: (res) => {
         console.log(`order created successfully`);
+        this.cartService.updateCart(true);
         this.toastr.success('Order Created successfully', 'Purchase Products')
         this.router.navigate(['orders']);
       },

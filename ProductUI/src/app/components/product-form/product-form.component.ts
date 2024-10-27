@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {CategoryService} from '../../services/category.service';
 import {BrandService} from '../../services/brand.service';
@@ -16,7 +16,7 @@ import {ProductForm} from '../../model/Product.model';
   templateUrl: './product-form.component.html',
   styleUrl: './product-form.component.css'
 })
-export class ProductFormComponent {
+export class ProductFormComponent implements OnInit, OnChanges{
   @Input() productData!: ProductForm;
   @Input() actionLabel: string = 'Create Product';
   @Output() formSubmit = new EventEmitter<any>();

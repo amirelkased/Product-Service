@@ -1,6 +1,7 @@
 import {CommonModule} from '@angular/common';
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
+import {CartService} from '../../services/cart.service';
 
 @Component({
   selector: 'app-header',
@@ -12,16 +13,17 @@ import {Router, RouterLink} from '@angular/router';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent {
-  cartItemCount: number = 10;
+export class HeaderComponent implements OnInit{
+  cartItemCount: number = 0;
   @Input() isAdmin: boolean = false;
   userImg = "https://www.fawry.com/wp-content/uploads/2022/07/hori-logo-small.png"
 
-  constructor(private readonly router: Router) {
-
+  constructor( private readonly cartService: CartService) {
   }
 
-  openCart() {
-    this.router.navigate(['orders/cart'])
+  ngOnInit(): void {
+    this.cartService.cartCount$.subscribe(count => {
+      this.cartItemCount = count;
+    });
   }
 }

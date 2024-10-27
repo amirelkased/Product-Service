@@ -1,0 +1,15 @@
+.position-relative {
+  position: relative;
+}
+
+.cart-count {
+  position: absolute;
+  top: -18px; /* Adjust this value to position the number */
+  right: -65px; /* Adjust this value to position the number */
+  background-color: red; /* Background color for visibility */
+  color: white; /* Text color */
+  border-radius: 70%; /* Make it circular */
+  padding: 2px 6px; /* Padding for better appearance */
+  font-size: 0.8rem; /* Adjust font size */
+  line-height: 1; /* Align text vertically */
+}

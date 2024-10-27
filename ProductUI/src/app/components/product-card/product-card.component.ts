@@ -46,6 +46,7 @@ export class ProductCardComponent {
   @Output() removeProduct = new EventEmitter();
   selectedProduct: ProductForm | null = null;
   showOverlay: boolean = false;
+  rating:number = Math.floor((Math.random()*10)%5);
 
   openProductDetails(product: any) {
     this.selectedProduct = product;

@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {ProductFormComponent} from '../product-form/product-form.component';
 import {ProductService} from '../../services/product.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FullFormProduct, ProductForm} from '../../model/Product.model';
 import {ToastrService} from 'ngx-toastr';
 
@@ -16,7 +16,8 @@ export class UpdateProductComponent {
 
   constructor(private readonly productService: ProductService,
               private readonly route: ActivatedRoute,
-              private readonly toastr:ToastrService
+              private readonly toastr:ToastrService,
+              private readonly router:Router
   ) {
     this.route.params.subscribe(
       params => {
@@ -53,6 +54,7 @@ export class UpdateProductComponent {
     this.productService.updateProduct(this.route.snapshot.params['id'], productData).subscribe({
       next: (res: FullFormProduct) => {
         console.log(`Updated product ${JSON.stringify(res)}`);
+        this.router.navigate(['/']);
         this.toastr.success(`Product Updated Successfully`, 'Update Product');
       },
       error: (err) => {
