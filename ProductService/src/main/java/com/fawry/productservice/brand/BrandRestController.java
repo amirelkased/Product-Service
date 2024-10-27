@@ -1,5 +1,6 @@
 package com.fawry.productservice.brand;
 
+import com.fawry.productservice.brand.dto.BrandRequestDto;
 import com.fawry.productservice.common.ResponsePage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

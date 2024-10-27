@@ -1,10 +1,11 @@
 package com.fawry.productservice.product;
 
 import com.fawry.productservice.common.ResponsePage;
+import com.fawry.productservice.product.dto.ProductRequestDto;
+import com.fawry.productservice.product.dto.ProductResponseDto;
 import com.fawry.productservice.product.dto.ProductsWithPriceResponse;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RequestMapping("api/v1/products")
 @RestController
 @RequiredArgsConstructor
 public class ProductRestController {
     private final ProductService productService;
-    private final Logger logger= LoggerFactory.getLogger(ProductRestController.class);
 
     @GetMapping("")
     public ResponseEntity<ResponsePage<ProductResponseDto>> getAllProducts(Pageable pageable){
@@ -55,7 +56,7 @@ public class ProductRestController {
     @DeleteMapping("{sku}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void removeProduct(@PathVariable String sku){
-        logger.info(sku);
+        log.info(sku);
         productService.deleteProduct(sku);
     }
 

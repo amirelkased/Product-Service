@@ -12,7 +12,7 @@ import org.springframework.retry.support.RetryTemplate;
 
 import java.time.Duration;
 
-//@Configuration
+@Configuration
 public class RabbitMQConfig {
     @Value("${rabbitmq.store.queue.name}")
     private String queue;
@@ -37,10 +37,6 @@ public class RabbitMQConfig {
                 .to(topicExchange())
                 .with(routingKey);
     }
-}
-
-@Configuration
-class innerConfig{
 
     @Bean
     public RetryTemplate retryTemplate(){

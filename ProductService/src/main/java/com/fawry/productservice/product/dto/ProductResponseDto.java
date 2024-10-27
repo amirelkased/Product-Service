@@ -1,5 +1,6 @@
-package com.fawry.productservice.product;
+package com.fawry.productservice.product.dto;
 
+import com.fawry.productservice.product.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

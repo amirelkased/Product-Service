@@ -1,4 +1,4 @@
-package com.fawry.productservice.brand;
+package com.fawry.productservice.brand.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

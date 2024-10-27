@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fawry.productservice.brand.Brand;
 import com.fawry.productservice.category.Category;
 import com.fawry.productservice.common.EntityAuditing;
+import com.fawry.productservice.product.dto.ProductStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

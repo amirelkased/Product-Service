@@ -1,5 +1,6 @@
-package com.fawry.productservice.product;
+package com.fawry.productservice.product.dto;
 
+import com.fawry.productservice.product.Product;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

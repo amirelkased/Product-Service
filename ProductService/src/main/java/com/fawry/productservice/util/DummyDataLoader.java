@@ -2,13 +2,13 @@ package com.fawry.productservice.util;
 
 import com.fawry.productservice.brand.Brand;
 import com.fawry.productservice.brand.BrandRepository;
-import com.fawry.productservice.brand.BrandService;
+import com.fawry.productservice.brand.implementation.BrandServiceImpl;
 import com.fawry.productservice.category.Category;
 import com.fawry.productservice.category.CategoryRepository;
 import com.fawry.productservice.category.CategoryService;
 import com.fawry.productservice.product.Product;
 import com.fawry.productservice.product.ProductRepository;
-import com.fawry.productservice.product.ProductStatus;
+import com.fawry.productservice.product.dto.ProductStatus;
 import com.fawry.productservice.stock.StoreService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class DummyDataLoader implements CommandLineRunner {
     private final CategoryRepository categoryRepository;
     private final BrandRepository brandRepository;
     private final ProductRepository productRepository;
-    private final BrandService brandService;
+    private final BrandServiceImpl brandService;
     private final CategoryService categoryService;
     private final StoreService storeService;
     private final RestTemplate restTemplate = new RestTemplate();

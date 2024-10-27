@@ -1,4 +1,4 @@
-package com.fawry.productservice.category;
+package com.fawry.productservice.category.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

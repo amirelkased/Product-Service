@@ -1,5 +1,6 @@
 package com.fawry.productservice.product;
 
+import com.fawry.productservice.product.dto.ProductResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,7 +14,7 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("""
-                SELECT new com.fawry.productservice.product.ProductResponseDto(
+                SELECT new com.fawry.productservice.product.dto.ProductResponseDto(
                 p.sku,p.title,p.description, p.price,p.imageUrl,p.category.name, p.brand.name
                 )
                 FROM Product p
