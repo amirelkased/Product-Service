@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql
+    container_name: mysqldb
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  rabbit_server:
+    container_name: rabbitmq_server
+    image: rabbitmq:4.0.2-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  product_service:
+    container_name: product_service
+    build: .
+    image: amirelkased/product_service:v1.0
+    depends_on:
+      - mysql
+      - rabbit_server
+    ports:
+      - "8080:8080"
+    environment:
+      MYSQL_HOST: mysqldb
+      RABBITMQ_HOST: rabbitmq_server
+
+  coupon_service:
+    container_name: coupon_service
+    image: yassen7/coupon_service
+    depends_on:
+      - mysql
+    ports:
+      - "8081:8080"
+    environment:
+      MYSQL_HOST: mysqldb
+
+volumes:
+  mysql-data:
