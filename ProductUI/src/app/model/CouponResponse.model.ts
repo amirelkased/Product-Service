@@ -5,6 +5,6 @@ export interface CouponResponse {
 }
 
 export interface CouponRequest {
-  coupon: string;
+  couponCode: string;
   amount: number
 }

@@ -4,11 +4,11 @@ import {FormsModule} from '@angular/forms';
 import {CartService, ProductCart} from '../../services/cart.service';
 import {Router, RouterLink} from '@angular/router';
 import {CouponService} from '../../services/coupon.service';
-import {CouponRequest} from '../../model/CouponResponse.model';
 import {OrderService} from '../../services/order.service';
 import {OrderRequest} from '../../model/OrderRequest.model';
 import {OrderItem} from '../../model/OrderResponse.model';
 import {ToastrService} from 'ngx-toastr';
+import {CouponRequest} from '../../model/CouponResponse.model';
 
 @Component({
   selector: 'app-cart',
@@ -29,7 +29,7 @@ export class CartComponent implements OnInit {
   constructor(private readonly cartService: CartService,
               private readonly couponService: CouponService,
               private readonly orderService: OrderService,
-              private readonly toastr:ToastrService,
+              private readonly toastr: ToastrService,
               private readonly router: Router) {
   }
 
@@ -40,26 +40,31 @@ export class CartComponent implements OnInit {
     });
   }
 
-  applyCoupon() {
-    if (this.couponCode.length == 0) return;
+  applyCoupon():boolean {
+    let coupon_status = false;
+    if (this.couponCode.length == 0) return false;
     const conponReq: CouponRequest = {
-      coupon: this.couponCode,
+      couponCode: this.couponCode,
       amount: (this.totalAmount - this.taxs)
     };
-    this.couponService.consume(conponReq).subscribe({
+    this.couponService.validate(conponReq).subscribe({
       next: (res) => {
-        if (res.status == 'success') {
-          this.toastr.success("Coupon applied successfully", 'Apply Coupon')
+        if (res.status.toLowerCase() === 'success') {
           console.log(res)
           this.discount = (this.totalAmount - this.taxs - res.amount);
+          this.toastr.success(`Coupon applied successfully with discount ${this.discount}$`, 'Apply Coupon')
           this.calculateTotal();
+          coupon_status = true;
         } else {
           this.toastr.error(`Ops! Error: ${res.message}`, 'Apply Coupon');
+          coupon_status = false;
         }
-      },error:(err)=>{
+      }, error: (err) => {
         this.toastr.error(`Ops! Error: ${err.error.message}`, 'Apply Coupon');
+        coupon_status = false;
       }
     })
+    return coupon_status;
   }
 
   calculateTotal() {
@@ -93,6 +98,7 @@ export class CartComponent implements OnInit {
 
   checkout() {
     // Logic for checkout
+    this.toastr.info("Proceeding to checkout", "Checkout order", {progressAnimation: 'decreasing'});
     console.log('Proceeding to checkout');
     const orderRequest: OrderRequest = new OrderRequest({
       customerId: 1900119,
@@ -107,10 +113,12 @@ export class CartComponent implements OnInit {
       next: (res) => {
         console.log(`order created successfully`);
         this.cartService.updateCart(true);
+        this.toastr.clear();
         this.toastr.success('Order Created successfully', 'Purchase Products')
         this.router.navigate(['orders']);
       },
       error: (err) => {
+        this.toastr.clear();
         this.toastr.error(`Ops! Error: ${err.error.message}`, 'Purchase Products');
         console.log(`failed to create order`);
         console.log(err);

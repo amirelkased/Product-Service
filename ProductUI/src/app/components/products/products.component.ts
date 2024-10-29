@@ -7,6 +7,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {PaginatorComponent} from '../paginator/paginator.component';
 import {StoreService} from '../../services/store.service';
+import {ProductStock} from '../../model/Stock.model';
 
 @Component({
   selector: 'app-products',
@@ -47,8 +48,7 @@ export class ProductsComponent implements OnInit {
       next: (response: ProductPage) => {
         console.log(response);
         this.page = response;
-        this.products = response.data.map(
-          product => {
+        this.products = response.data.map(product => {
             let pro = new Product(
               product.sku,
               product.title,
@@ -60,14 +60,21 @@ export class ProductsComponent implements OnInit {
               "",
               0
             )
-            // this.storeService.getProductStock(pro.sku).subscribe(
-            //   {
-            //     next: (res: ProductStock) => {
-            //       product.stock= res.stock;
-            //     }
-            //   });
-            pro.stock = this.storeService.getProductStock(pro.sku);
-            pro.inventoryStatus = getStockStatus(pro.stock);
+            this.storeService.getProductStock(pro.sku).subscribe(
+              {
+                next: (res: ProductStock) => {
+                  console.log(res);
+                  pro.stock = (res == null) ? 0 : res.quantity;
+                  pro.inventoryStatus = getStockStatus(pro.stock);
+                },
+                error: (err) => {
+                  pro.stock = 0;
+                  pro.inventoryStatus = getStockStatus(pro.stock);
+                  console.log('Error when request to get stock value')
+                  console.log(err)
+                }
+              });
+            // pro.stock = this.storeService.getProductStock(pro.sku).;
             return pro;
           }
         );
@@ -93,7 +100,7 @@ export class ProductsComponent implements OnInit {
   }
 
   trackByProductId(index: number, product: Product): string {
-    return product.sku; // Assuming each product has a unique id
+    return product.sku;
   }
 
   removeProduct(sku: string) {

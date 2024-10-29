@@ -7,7 +7,7 @@ import {CategoryPage} from '../model/Category.model';
   providedIn: 'root'
 })
 export class CategoryService {
-  private readonly RESOURCE_URL = 'http://localhost:8080/api/v1/categories'
+  private readonly RESOURCE_URL = 'http://localhost:8081/api/v1/categories'
 
   constructor(private readonly http: HttpClient) {
   }

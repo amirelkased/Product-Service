@@ -8,7 +8,7 @@ import {Order, OrderPageResponse} from '../model/OrderResponse.model';
   providedIn: 'root'
 })
 export class OrderService {
-  private readonly RESOURCE_URL = 'http://localhost:8081/api/v1/orders'
+  private readonly RESOURCE_URL = 'http://localhost:8080/api/v1/orders'
 
   constructor(
     private readonly http: HttpClient

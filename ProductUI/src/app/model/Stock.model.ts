@@ -1,3 +1,4 @@
 export interface ProductStock {
-  stock: number
+  sku:string;
+  quantity: number;
 }

@@ -7,7 +7,7 @@ import {BrandPage} from '../model/Brand.model';
   providedIn: 'root'
 })
 export class BrandService {
-  private readonly RESOURCE_URL = 'http://localhost:8080/api/v1/brands'
+  private readonly RESOURCE_URL = 'http://localhost:8081/api/v1/brands'
 
   constructor(private readonly http: HttpClient) {
   }
