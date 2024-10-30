@@ -47,7 +47,7 @@
         <tr *ngFor="let order of orders" class="text-center">
           <td>{{ order.id }}</td>
           <td>{{ order.customerId }}</td>
-          <td>{{ order.totalAmount - order.discountAmount  | currency }}</td>
+          <td>{{ order.totalAmount + 14 - order.discountAmount  | currency }}</td>
           <td>{{ order.discountAmount | currency }}</td>
           <td>{{ order.orderStatus }}</td>
           <td>

@@ -72,7 +72,7 @@ public class DummyDataLoader implements CommandLineRunner {
                         product.setBrand(brandService.getBrandByName(Objects.equals(productResponse.getBrand(), null) ?"sung":productResponse.getBrand()));
                         return product;
                     })
-                    .peek(product -> storeService.sendProductData(product.getSku()))
+//                    .peek(product -> storeService.sendProductData(product.getSku()))
                     .toList();
             productRepository.saveAll(data);
         }
