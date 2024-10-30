@@ -36,13 +36,28 @@ export class CartComponent implements OnInit {
   ngOnInit() {
     this.cartService.cart$.subscribe(products => {
       this.cartProducts = products;
+      this.cartProducts.forEach(product => {
+        this.updateMaxQuantity(product);
+      });
       this.calculateTotal();
+      this.applyCoupon();
     });
   }
 
-  applyCoupon():boolean {
+  updateMaxQuantity(item: ProductCart) {
+    item.maxQuantity = Array.from({length: Math.min(4, item.stock)}, (_, i) => i + 1);
+  }
+
+  applyCoupon(): boolean {
+    console.log('apply coupon work')
     let coupon_status = false;
-    if (this.couponCode.length == 0) return false;
+    if (this.couponCode.length == 0) {
+      const cachedCoupon = this.cartService.getCouponIfExists();
+      if (cachedCoupon.length == 0) {
+        return false;
+      }
+      this.couponCode = cachedCoupon;
+    }
     const conponReq: CouponRequest = {
       couponCode: this.couponCode,
       amount: (this.totalAmount - this.taxs)
@@ -51,6 +66,7 @@ export class CartComponent implements OnInit {
       next: (res) => {
         if (res.status.toLowerCase() === 'success') {
           console.log(res)
+          this.cartService.appliedCoupon(this.couponCode);
           this.discount = (this.totalAmount - this.taxs - res.amount);
           this.toastr.success(`Coupon applied successfully with discount ${this.discount}$`, 'Apply Coupon')
           this.calculateTotal();
@@ -60,6 +76,7 @@ export class CartComponent implements OnInit {
           coupon_status = false;
         }
       }, error: (err) => {
+        console.log(conponReq.couponCode, conponReq.amount)
         this.toastr.error(`Ops! Error: ${err.error.message}`, 'Apply Coupon');
         coupon_status = false;
       }
@@ -70,12 +87,13 @@ export class CartComponent implements OnInit {
   calculateTotal() {
     const subtotal = this.cartProducts.reduce((acc, product) => acc + (product.price * product.quantity), 0);
     this.totalAmount = (subtotal - this.discount + this.taxs);
-    console.log(`subtotal ${subtotal} dis ${this.discount} total amount ${this.totalAmount} tax ${this.taxs}`)
+    console.log(`subtotal: ${subtotal} discount: ${this.discount} total amount: ${this.totalAmount} tax: ${this.taxs}`)
   }
 
   changeQuantity($event: any, item: ProductCart) {
     console.log(`Quautity changes for ${item.title} ${$event.target.value}`);
     item.quantity = $event.target.value;
+    this.cartService.updateQuantity(this.cartProducts);
     this.calculateTotal();
     this.applyCoupon();
   }
@@ -112,7 +130,8 @@ export class CartComponent implements OnInit {
     this.orderService.placeOrder(orderRequest).subscribe({
       next: (res) => {
         console.log(`order created successfully`);
-        this.cartService.updateCart(true);
+        this.couponCode = '';
+        this.cartService.checkOut();
         this.toastr.clear();
         this.toastr.success('Order Created successfully', 'Purchase Products')
         this.router.navigate(['orders']);

@@ -111,7 +111,7 @@ export class ProductsComponent implements OnInit {
 function getStockStatus(stock: number): string {
   if (stock === 0) {
     return "OUT_OF_STOCK";
-  } else if (stock <= 5) {
+  } else if (stock <= 4) {
     return "LOW_STOCK";
   } else {
     return "IN_STOCK";

@@ -1,4 +1,4 @@
-<section class="bg-blend-color-burn py-2">
+<section class="bg-blend-color-burn py-2 ">
   <section class="bg-gray-100">
     <main class="container mx-auto px-4 py-6">
       <div class="bg-white p-6 rounded shadow-sm">
@@ -9,14 +9,17 @@
               <img [src]="item.image" alt="Product Image" class="w-16 h-16"/>
               <div class="flex-1">
                 <a [routerLink]="['products/' + item.sku]" class="font-bold">{{ item.title }}</a>
-                <div class="text-gray-600">Description Here</div>
+                <div class="text-gray-600">{{ item.description.substring(0, 50) }}...</div>
               </div>
               <div class="flex items-center space-x-4">
                 <label class="text-gray-600">Quantity:</label>
-                <select class="border rounded px-2 py-1" (change)="changeQuantity($event, item)">
-                  <option *ngFor="let qty of [1, 2, 3, 4]">{{ qty }}</option>
+<!--                <select class="border rounded px-2 py-1" (change)="changeQuantity($event, item)">-->
+<!--                  <option *ngFor="let qty of item.maxQuantity">{{ qty }}</option>-->
+<!--                </select>-->
+                <select class="border rounded px-2 py-1" [(ngModel)]="item.quantity" (change)="changeQuantity($event, item)">
+                  <option *ngFor="let qty of item.maxQuantity">{{ qty }}</option>
                 </select>
-                <div class="flex flex-col items-end">
+                <div class="flex flex-col ">
                   <div class="font-bold">{{ item.price * item.quantity | currency }}</div>
                   <div class="text-gray-600">{{ item.price | currency }} / per item</div>
                 </div>

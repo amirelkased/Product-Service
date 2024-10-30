@@ -8,6 +8,7 @@ import org.springframework.amqp.core.TopicExchange;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.retry.support.RetryTemplate;
 
 @Configuration
@@ -24,16 +25,19 @@ public class RabbitMQConfig {
     private long retryBackoff;
 
     @Bean
+    @Lazy(value = false)
     public Queue queue() {
         return new Queue(queue);
     }
 
     @Bean
+    @Lazy(value = false)
     public TopicExchange topicExchange() {
         return new TopicExchange(exchange);
     }
 
     @Bean
+    @Lazy(value = false)
     public Binding binding() {
         return BindingBuilder.bind(queue())
                 .to(topicExchange())
@@ -41,6 +45,7 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    @Lazy(value = false)
     public RetryTemplate retryTemplate() {
         return RetryTemplate.builder()
                 .maxAttempts(retryMaxAttemps)

@@ -63,11 +63,13 @@ export class ProductCardComponent {
 
   addToCart() {
     console.log('Product added to cart:', this.product.title);
-    const productCart = {sku: '', title: '', price: 0, quantity: 1, image: ''};
+    const productCart = {sku: '', title: '', price: 0, quantity: 1, image: '', stock:0, description:''};
     productCart.sku = this.product.sku;
     productCart.title = this.product.title;
     productCart.image = this.product.imageUrl;
     productCart.price = this.product.price;
+    productCart.stock = this.product.stock;
+    productCart.description = this.product.description;
     this.cartService.addToCart(productCart);
     this.toastr.success(`Product ${this.product.title} added to cart successfully!`,'Add To Cart');
   }

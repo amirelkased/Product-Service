@@ -52,12 +52,12 @@ public class DummyDataLoader implements CommandLineRunner {
                     brands.add(productResponse.getBrand());
                 }
             });
-//            log.info(categories.toString());
+
             categories.forEach(category -> categoryRepository.save(
                             Category.builder().name(category).build()
                     )
             );
-//            log.info(brands.toString());
+
             brands.forEach(brand ->
                     brandRepository.save(
                             Brand.builder().name(brand).build()
@@ -65,14 +65,12 @@ public class DummyDataLoader implements CommandLineRunner {
             );
             data = productListResponse.getProducts().stream()
                     .map(productResponse -> {
-//                        log.info(productResponse.toString());
                         Product product = mapToProduct(productResponse);
                         product.setStatus(ProductStatus.ACTIVE);
                         product.setCategory(categoryService.getCategoryByName(productResponse.getCategory()));
                         product.setBrand(brandService.getBrandByName(Objects.equals(productResponse.getBrand(), null) ?"sung":productResponse.getBrand()));
                         return product;
                     })
-//                    .peek(product -> storeService.sendProductData(product.getSku()))
                     .toList();
             productRepository.saveAll(data);
         }
