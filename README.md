@@ -54,7 +54,7 @@ The Product API is a backend service that manages product, category, and brand e
 
 **Usage**
   - Access the CRUD endpoints for managing products, categories, and brands through standard RESTful API calls.
-  - The frontend provides a UI for interacting with the Product API.
+  - The front end provides a UI for interacting with the Product API.
 
 **Future Enhancements**
   - Improved UI/UX in Product UI
